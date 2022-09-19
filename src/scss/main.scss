@@ -1,0 +1,22 @@
+// Default variable overrides, 변수 재정의
+$primary: #FDC000;
+
+// Required
+@import "../../node_modules/bootstrap/scss/functions";
+@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/mixins";
+
+// scss-docs-start theme-colors-map
+// 테마 컬러를 모두 재정의 하여 사용할 것이라면, 맨 상단에 코드를 위치하게 하고 테마 컬러를 일부분만 수정하여 사용할 것이라면 이렇게 중간에 위치해서 써야 함
+// $theme-colors: (
+//   "primary":    orange,
+//   "secondary":  red,
+//   "success":    $success,
+//   "info":       $info,
+//   "warning":    $warning,
+//   "danger":     $danger,
+//   "light":      $light,
+//   "dark":       $dark
+// ) !default;
+
+@import "../../node_modules/bootstrap/scss/bootstrap";
