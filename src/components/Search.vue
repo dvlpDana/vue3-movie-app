@@ -4,11 +4,12 @@
       v-model="title" 
       type="text"
       class="form-control"
-      placeholder="Search for Movies, Series & more" />
+      placeholder="Search for Movies, Series & more"
+      @keyup.enter="apply" />
     <div class="selects">
       <select 
-        v-for="filter in filters"
         v-model="$data[filter.name]"
+        v-for="filter in filters"
         :key="filter.name" 
         class="form-select">
         <option 
@@ -23,6 +24,9 @@
         </option>
       </select>
     </div>
+    <button class="btn btn-primary" @click="apply">
+      Apply
+    </button>
   </div>
 </template>
 
@@ -56,6 +60,18 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    async apply() {
+      //movie.js의 actions에 접근하는 메소드 dispatch
+      //매개변수로 payload를 전달할 수 있고, payload는 하나의 객체 데이터임
+      this.$store.dispatch('movie/searchMovies', {
+        title: this.title,
+        type: this.type,
+        number: this.number,
+        year: this.year
+      })
+    }
   }
 };
 </script>
@@ -72,10 +88,19 @@ export default {
   }
   .selects {
     display: flex;
-    select:not(:last-child) {
+    select {
       width: 120px;
       margin-right: 10px;
-    }
+      &:last-child {
+        margin-right: 0;
+      }
+    } 
+  }
+  .btn {
+    widows: 120px;
+    height: 50px;
+    font-weight: 700;
+    flex-shrink: 0;
   }
 }
 </style>
