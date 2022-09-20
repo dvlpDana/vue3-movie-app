@@ -1,5 +1,17 @@
 <template>
-  <h1>Movie!!</h1>
+  <div class="container">
+    <div class="skeletons">
+      <div class="skeleton poster"></div>
+      <div class="specs">
+        <div class="skeleton title"></div>
+        <div class="skeleton spec"></div>
+        <div class="skeleton plot"></div>
+        <div class="skeleton etc"></div>
+        <div class="skeleton etc"></div>
+        <div class="skeleton etc"></div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>

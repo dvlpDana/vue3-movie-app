@@ -2,8 +2,14 @@
   <header>
     <Logo />
     <ul class="nav nav-pills">
-      <li v-for="nav in navigations" :key="nav.name" class="nav-item">
-        <RouterLink :to="nav.href" active-class="active" class="nav-link">
+      <li 
+        v-for="nav in navigations"
+        :key="nav.name" 
+        class="nav-item">
+        <RouterLink 
+          :to="nav.href"
+          active-class="active" 
+          lass="nav-link">
           {{ nav.name }}
         </RouterLink>
       </li>
@@ -27,7 +33,7 @@ export default {
         },
         {
           name: "Movie",
-          href: "/movie/tt4520988"
+          href: "/movie/id"
         },
         {
           name: "About",

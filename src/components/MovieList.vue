@@ -18,7 +18,7 @@
           v-for="movie in movies"
           :key="movie.imdbID"
           :movie="movie" />
-        <MovieItem/>
+        <MovieItem />
       </div>
     </div>
   </div>
