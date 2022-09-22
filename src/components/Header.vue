@@ -9,7 +9,7 @@
         <RouterLink 
           :to="nav.href"
           active-class="active" 
-          lass="nav-link">
+          class="nav-link">
           {{ nav.name }}
         </RouterLink>
       </li>

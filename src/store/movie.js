@@ -33,6 +33,7 @@ export default {
   //actions : methods, 특정 데이터의 직접적인 수정은 불가능함, 비동기로 동작함
   actions: {
     async searchMovies({ state, commit }, payload) {
+      // const { title, type, number, year } = payload
       if (state.loading) return
 
       commit('updateState', {
@@ -111,7 +112,7 @@ export default {
 
 function _fetchMovie(payload) {
   const { title, type, year, page, id } = payload;
-  const OMDB_API_KEY = '7035c60c';
+  const OMDB_API_KEY = 'c7a854b0';
   const url
     = id 
     ? `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${id}` 

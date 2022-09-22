@@ -1,30 +1,32 @@
 <template>
   <div class="container">
-    <input 
-      v-model="title" 
+    <input
+      v-model="title"
       type="text"
       class="form-control"
       placeholder="Search for Movies, Series & more"
       @keyup.enter="apply" />
     <div class="selects">
-      <select 
+      <select
         v-model="$data[filter.name]"
         v-for="filter in filters"
-        :key="filter.name" 
+        :key="filter.name"
         class="form-select">
         <option 
-          v-if="filter.name === 'year'"
+          v-if="filter.name === 'year'" 
           value="">
-          All Years
+          All Year
         </option>
         <option 
-          v-for="item in filter.items"
+          v-for="item in filter.items" 
           :key="item">
-        {{ item }}
+          {{ item }}
         </option>
       </select>
     </div>
-    <button class="btn btn-primary" @click="apply">
+    <button 
+      class="btn btn-primary" 
+      @click="apply">
       Apply
     </button>
   </div>
@@ -34,29 +36,29 @@
 export default {
   data() {
     return {
-      title: '',
-      type: 'movie',
+      title: "",
+      type: "movie",
       number: 10,
-      year: '',
+      year: "",
       filters: [
         {
-          name: 'type',
-          items: ['movie', 'series', 'episode']
+          name: "type",
+          items: ["movie", "series", "episode"]
         },
         {
-          name: 'number',
+          name: "number",
           items: [10, 20, 30]
         },
         {
-          name: 'year',
+          name: "year",
           items: (() => {
-            const years = []
-            const thisYear = new Date().getFullYear() //
+            const years = [];
+            const thisYear = new Date().getFullYear(); //
             for (let i = thisYear; i >= thisYear - 30; i -= 1) {
-              years.push(i)
+              years.push(i);
             }
-            return years
-           })()
+            return years;
+          })()
         }
       ]
     };
@@ -65,12 +67,12 @@ export default {
     async apply() {
       //movie.js의 actions에 접근하는 메소드 dispatch
       //매개변수로 payload를 전달할 수 있고, payload는 하나의 객체 데이터임
-      this.$store.dispatch('movie/searchMovies', {
+      this.$store.dispatch("movie/searchMovies", {
         title: this.title,
         type: this.type,
         number: this.number,
         year: this.year
-      })
+      });
     }
   }
 };
@@ -94,7 +96,7 @@ export default {
       &:last-child {
         margin-right: 0;
       }
-    } 
+    }
   }
   .btn {
     widows: 120px;
@@ -102,5 +104,6 @@ export default {
     font-weight: 700;
     flex-shrink: 0;
   }
+
 }
 </style>
