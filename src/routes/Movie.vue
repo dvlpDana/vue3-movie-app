@@ -18,11 +18,15 @@
         fixed />
     </template>
     <div
-      v-else 
+      v-else
       class="movie-details">
       <div
-        :style="{ backgroundImage: `url(${requestDiffSizeImage(theMovie.Poster)})` }" 
-        class="poster"></div>
+        :style="{ backgroundImage: `url(${requestDiffSizeImage(theMovie.Poster)})` }"
+        class="poster">
+        <Loader
+          v-if="imageLoading"
+          absolute />
+      </div>
       <div class="specs">
         <div class="title">
           {{ theMovie.Title }}
@@ -39,32 +43,32 @@
           <h3>Ratings</h3>
           <div class="rating-wrap">
             <div
-              v-for="{ Source: name, Value: score } in theMovie.Ratings" 
+              v-for="{ Source: name, Value: score } in theMovie.Ratings"
               :key="name"
               :title="name"
               class="rating">
-              <img 
-                :src="`~/assets/${name}.png`" 
-                alt="name" />
+              <img
+                :src="`https://raw.githubusercontent.com/ParkYoungWoong/vue3-movie-app/master/src/assets/${name}.png`"
+                :alt="name" />
               <span>{{ score }}</span>
             </div>
           </div>
-          <div>
-            <h3>Actors</h3>
-            {{ theMovie.Actors }}
-          </div>
-          <div>
-            <h3>Director</h3>
-            {{ theMovie.Director }}
-          </div>
-          <div>
-            <h3>Production</h3>
-            {{ theMovie.Production }}
-          </div>
-          <div>
-            <h3>Genre</h3>
-            {{ theMovie.Genre }}
-          </div>
+        </div>
+        <div>
+          <h3>Actors</h3>
+          {{ theMovie.Actors }}
+        </div>
+        <div>
+          <h3>Director</h3>
+          {{ theMovie.Director }}
+        </div>
+        <div>
+          <h3>Production</h3>
+          {{ theMovie.Production }}
+        </div>
+        <div>
+          <h3>Genre</h3>
+          {{ theMovie.Genre }}
         </div>
       </div>
     </div>
@@ -72,35 +76,50 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Loader from "~/components/Loader";
 export default {
   components: {
     Loader
   },
-  computed: {
-    theMovie() {
-      return this.$store.state.movie.theMovie
-    },
-    loading() {
-      return this.$store.state.movie.loading
+  data() {
+    return {
+      imageLoading: true
     }
   },
+  computed: {
+    ...mapState('movie', [
+      'loading',
+      'theMovie'
+    ])
+  },
   created() {
-    this.$store.dispatch("movie/searchMovieWithId", {
-      //movie/tt123761
+    this.$store.dispatch('movie/searchMovieWithId', {
       id: this.$route.params.id
-    });
+    })
   },
   methods: {
     requestDiffSizeImage(url, size = 700) {
-      url.replace('SX300',`SX${size}`)
+      // 잘못된 URL(Poster)인 경우.
+      if (!url || url === 'N/A') {
+        this.imageLoading = false
+        return ''
+      }
+      const src = url.replace('SX300', `SX${size}`)
+      // 정상적인 URL인 경우.
+      this.$loadImage(src)
+        .then(() => {
+          this.imageLoading = false
+        })
+      return src
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
 @import "~/scss/main";
+
 .container {
   padding-top: 40px;
 }
@@ -109,7 +128,7 @@ export default {
   .poster {
     flex-shrink: 0;
     width: 500px;
-    height: 500px * 3 / 2;
+    height: 500px * 3/2;
     margin-right: 70px;
   }
   .specs {
@@ -132,7 +151,6 @@ export default {
       height: 250px;
       margin-top: 20px;
     }
-
     &.etc {
       width: 50%;
       height: 50px;
@@ -143,26 +161,27 @@ export default {
 .movie-details {
   display: flex;
   color: $gray-600;
-  .poster{
-    flex-shrink: 0;
+  .poster {
     width: 500px;
-    height: 500px * 3 / 2;
+    height: 500px * 3/2;
     margin-right: 70px;
     border-radius: 10px;
     background-color: $gray-200;
     background-size: cover;
     background-position: center;
+    position: relative;
+    flex-shrink: 0;
   }
-  .specs{
+  .specs {
     flex-grow: 1;
-    .title{
+    .title {
       color: $black;
-      font-family: 'Oswald', sans-serif;
+      font-family: "Oswald", sans-serif;
       font-size: 70px;
       line-height: 1;
       margin-bottom: 30px;
     }
-    .labels{
+    .labels {
       color: $primary;
       span {
         &::after {
@@ -177,14 +196,14 @@ export default {
     .plot {
       margin-top: 20px;
     }
-    .ratings{
+    .ratings {
       .rating-wrap {
         display: flex;
-        .rating{
+        .rating {
           display: flex;
           align-items: center;
           margin-right: 32px;
-          img{
+          img {
             height: 30px;
             flex-shrink: 0;
             margin-right: 6px;
@@ -192,14 +211,14 @@ export default {
         }
       }
     }
-    h3{
+    h3 {
       margin: 24px 0 6px;
       color: $black;
-      font-family: 'Oswald', sans-serif;
+      font-family: "Oswald", sans-serif;
       font-size: 20px;
     }
   }
-    @include media-breakpoint-down(xl) {
+  @include media-breakpoint-down(xl) {
     .poster {
       width: 300px;
       height: 300px * 3/2;

@@ -2,30 +2,30 @@
   <div class="container">
     <input
       v-model="title"
-      type="text"
       class="form-control"
+      type="text"
       placeholder="Search for Movies, Series & more"
       @keyup.enter="apply" />
     <div class="selects">
       <select
-        v-model="$data[filter.name]"
         v-for="filter in filters"
+        v-model="$data[filter.name]"
         :key="filter.name"
         class="form-select">
-        <option 
-          v-if="filter.name === 'year'" 
+        <option
+          v-if="filter.name === 'year'"
           value="">
-          All Year
+          All Years
         </option>
-        <option 
-          v-for="item in filter.items" 
+        <option
+          v-for="item in filter.items"
           :key="item">
           {{ item }}
         </option>
       </select>
     </div>
-    <button 
-      class="btn btn-primary" 
+    <button
+      class="btn btn-primary"
       @click="apply">
       Apply
     </button>
@@ -36,49 +36,49 @@
 export default {
   data() {
     return {
-      title: "",
-      type: "movie",
+      title: '',
+      type: 'movie',
       number: 10,
-      year: "",
+      year: '',
       filters: [
         {
-          name: "type",
-          items: ["movie", "series", "episode"]
+          name: 'type',
+          items: ['movie', 'series', 'episode']
         },
         {
-          name: "number",
+          name: 'number',
           items: [10, 20, 30]
         },
         {
-          name: "year",
+          name: 'year',
           items: (() => {
-            const years = [];
-            const thisYear = new Date().getFullYear(); //
-            for (let i = thisYear; i >= thisYear - 30; i -= 1) {
-              years.push(i);
+            const years = []
+            const thisYear = new Date().getFullYear()
+            for (let i = thisYear; i >= 1985; i -= 1) {
+              years.push(i)
             }
-            return years;
+            return years
           })()
         }
       ]
-    };
+    }
   },
   methods: {
-    async apply() {
-      //movie.js의 actions에 접근하는 메소드 dispatch
-      //매개변수로 payload를 전달할 수 있고, payload는 하나의 객체 데이터임
-      this.$store.dispatch("movie/searchMovies", {
+    apply() {
+      this.$store.dispatch('movie/searchMovies', {
         title: this.title,
         type: this.type,
         number: this.number,
         year: this.year
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
+@import "~/scss/main";
+
 .container {
   display: flex;
   > * {
@@ -99,11 +99,27 @@ export default {
     }
   }
   .btn {
-    widows: 120px;
+    width: 120px;
     height: 50px;
-    font-weight: 700;
     flex-shrink: 0;
+    font-weight: 700;
   }
-
+  @include media-breakpoint-down(lg) {
+    display: block;
+    input {
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+    .selects {
+      margin-right: 0;
+      margin-bottom: 10px;
+      select {
+        width: 100%;
+      }
+    }
+    .btn {
+      width: 100%;
+    }
+  }
 }
 </style>

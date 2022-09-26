@@ -1,8 +1,12 @@
 <template>
-  <div
-    :to="`/movie/${movie.imdbID}`" 
-    :style="{ backgroundImage: `url(${movie.Poster})` }" 
+  <RouterLink
+    :to="`/movie/${movie.imdbID}`"
+    :style="{ backgroundImage: `url(${movie.Poster})` }"
     class="movie">
+    <Loader
+      v-if="imageLoading"
+      :size="1.5"
+      absolute />
     <div class="info">
       <div class="year">
         {{ movie.Year }}
@@ -11,22 +15,42 @@
         {{ movie.Title }}
       </div>
     </div>
-  </div>
+  </RouterLink>
 </template>
-
 <script>
+import Loader from "~/components/Loader";
+
 export default {
+  components: {
+    Loader
+  },
   props: {
     movie: {
       type: Object,
-      default: () => ({}),
-      //default: function () {return{} }
-      //빈 객체 데이터를 전달하고 싶다면, 데이터에 빈 객체를 바로 담는 것이 아니라 함수 형태로 빈 객체를 반환하는 형식으로 데이터를 전달해야 함
-    },
+      default: () => ({})
+    }
   },
-};
+  data() {
+    return {
+      imageLoading: true
+    }
+  },
+  mounted() {
+    this.init()
+  },
+  methods: {
+    async init() {
+      const poster = this.movie.Poster
+      if (!poster || poster === 'N/A') {
+        this.imageLoading = false
+      } else {
+        await this.$loadImage(poster)
+        this.imageLoading = false
+      }
+    }
+  }
+}
 </script>
-
 
 <style lang="scss" scoped>
 @import "~/scss/main";
@@ -34,7 +58,7 @@ export default {
   $width: 200px;
   width: $width;
   height: $width * 3 / 2;
-  margin : 10px;
+  margin: 10px;
   border-radius: 4px;
   background-color: $gray-400;
   background-size: cover;
@@ -50,7 +74,12 @@ export default {
     border: 6px solid $primary;
   }
   .info {
-    background-color: rgba($color: ($black), $alpha: .3);
+    background-color: rgba(
+      $color: (
+        $black
+      ),
+      $alpha: 0.3
+    );
     width: 100%;
     padding: 14px;
     font-size: 14px;
