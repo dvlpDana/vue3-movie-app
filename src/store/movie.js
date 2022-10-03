@@ -1,6 +1,6 @@
 import axios from "axios";
 //중복되는 api 값이 있다면, 중복의 문제를 해결하기 위해 lodash/uniqBy 메소드 활용할 수 있음
-import _uniqBy from 'lodash/uniqBy'
+import _uniqBy from "lodash/uniqBy";
 const _defaultMessage = "Search for the movie title!";
 
 export default {
@@ -29,7 +29,7 @@ export default {
       state.loading = false;
     }
   },
-  // Vue.js methods 옵션과 유사함, 변이(Mutations)가 아닌 나머지 모든 로직을 관리합니다.
+  //Vue.js methods 옵션과 유사함, 변이(Mutations)가 아닌 나머지 모든 로직을 관리합니다.
   //actions : methods, 특정 데이터의 직접적인 수정은 불가능함, 비동기로 동작함
   actions: {
     async searchMovies({ state, commit }, payload) {
@@ -107,25 +107,6 @@ export default {
   }
 };
 
-function _fetchMovie(payload) {
-  const { title, type, year, page, id } = payload;
-  const OMDB_API_KEY = "7035c60c";
-
-  const url = id
-    ? `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${id}&plot=full`
-    : `https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${title}&type=${type}&y=${year}&page=${page}`;
-
-  return new Promise((resolve, reject) => {
-    axios
-      .get(url)
-      .then((res) => {
-        if (res.data.Error) {
-          reject(res.data.Error);
-        }
-        resolve(res);
-      })
-      .catch((err) => {
-        reject(err.message);
-      });
-  });
+async function _fetchMovie(payload) {
+  return await axios.post('/.netlify/functions/movie', payload)
 }
