@@ -42,6 +42,7 @@ describe('routes/Movie.vue', () => {
 
   test('정상적인 이미지 주소가 아닌 경우 빈 문자를 반환합니다', () => {
     expect(wrapper.vm.requestDiffSizeImage()).toBe('')
+    // N/A : 해당사항 없음
     expect(wrapper.vm.requestDiffSizeImage('N/A')).toBe('')
   })
 })
